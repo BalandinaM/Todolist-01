@@ -1,8 +1,7 @@
 // import { useRef } from "react";
-import { KeyboardEventHandler } from "react";
 import { FilterValues, Task } from "./App";
 import { Button } from "./Button";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 type Props = {
   title: string;
@@ -10,27 +9,44 @@ type Props = {
   date?: string;
   deleteTask: (taskId: string) => void;
   changeFilter: (value: FilterValues) => void;
-  createTask: (title: string) => void
+  createTask: (title: string) => void;
+  changeTaskStatus: (taskId: Task['id'], status: Task['isDone']) => void;
 };
 
-export const TodolistItem = ({ title, tasks, date, deleteTask, changeFilter, createTask }: Props) => {
+export const TodolistItem = ({
+  title,
+  tasks,
+  date,
+  deleteTask,
+  changeFilter,
+  createTask,
+  changeTaskStatus,
+}: Props) => {
   // const inputRef = useRef<HTMLInputElement>(null)
-  const [taskTitle, setTaskTitle] = useState('');
+  const [taskTitle, setTaskTitle] = useState("");
 
   const createTaskHandler = () => {
-    createTask(taskTitle)
-    setTaskTitle('')
-  }
+    createTask(taskTitle);
+    setTaskTitle("");
+  };
 
   const changeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskTitle(e.currentTarget.value)
-  }
+    setTaskTitle(e.currentTarget.value);
+  };
 
-  const createTaskOnEnterHandler = (e: KeyboardEventHandler<HTMLInputElement>) => {
+  const createTaskOnEnterHandler = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Enter") {
       createTaskHandler();
     }
   };
+
+  // const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  //   console.log(e.currentTarget.checked)
+  //   const newStatusValue = e.currentTarget.checked;
+  //   changeTaskStatus(taskId, newStatusValue)
+  // };
 
   return (
     <div>
@@ -64,10 +80,19 @@ export const TodolistItem = ({ title, tasks, date, deleteTask, changeFilter, cre
               const deleteTaskHandler = () => {
                 deleteTask(task.id);
               };
+              const changeTaskStatusHandler = (
+                e: ChangeEvent<HTMLInputElement>,
+              ) => {
+                changeTaskStatus(task.id, e.currentTarget.checked);
+              };
 
               return (
                 <li key={task.id}>
-                  <input type="checkbox" checked={task.isDone} />
+                  <input
+                    type="checkbox"
+                    checked={task.isDone}
+                    onChange={changeTaskStatusHandler}
+                  />
                   <span>{task.title}</span>
                   <Button onClick={deleteTaskHandler} title={"X"} />
                 </li>
