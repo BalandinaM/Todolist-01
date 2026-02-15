@@ -10,7 +10,7 @@ type Props = {
   deleteTask: (taskId: string) => void;
   changeFilter: (value: FilterValues) => void;
   createTask: (title: string) => void;
-  changeTaskStatus: (taskId: Task['id'], status: Task['isDone']) => void;
+  changeTaskStatus: (taskId: Task['id'], isDone: Task['isDone']) => void;
 };
 
 export const TodolistItem = ({
@@ -26,8 +26,11 @@ export const TodolistItem = ({
   const [taskTitle, setTaskTitle] = useState("");
 
   const createTaskHandler = () => {
-    createTask(taskTitle);
-    setTaskTitle("");
+    if (taskTitle.trim() !== '') {
+      createTask(taskTitle);
+      setTaskTitle("");
+    }
+   
   };
 
   const changeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,12 +44,6 @@ export const TodolistItem = ({
       createTaskHandler();
     }
   };
-
-  // const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-  //   console.log(e.currentTarget.checked)
-  //   const newStatusValue = e.currentTarget.checked;
-  //   changeTaskStatus(taskId, newStatusValue)
-  // };
 
   return (
     <div>
