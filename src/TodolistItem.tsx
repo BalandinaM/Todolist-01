@@ -11,6 +11,7 @@ type Props = {
   changeFilter: (value: FilterValues) => void;
   createTask: (title: string) => void;
   changeTaskStatus: (taskId: Task['id'], isDone: Task['isDone']) => void;
+  filter: FilterValues;
 };
 
 export const TodolistItem = ({
@@ -21,20 +22,25 @@ export const TodolistItem = ({
   changeFilter,
   createTask,
   changeTaskStatus,
+  filter
 }: Props) => {
   // const inputRef = useRef<HTMLInputElement>(null)
   const [taskTitle, setTaskTitle] = useState("");
+  const [error, setError] = useState<string | null>(null)
 
   const createTaskHandler = () => {
     if (taskTitle.trim() !== '') {
       createTask(taskTitle);
       setTaskTitle("");
+    } else {
+      setError("Title is required")
     }
    
   };
 
   const changeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value);
+    setError(null)
   };
 
   const createTaskOnEnterHandler = (
@@ -54,8 +60,10 @@ export const TodolistItem = ({
             value={taskTitle}
             onChange={changeInputHandler}
             onKeyDown={createTaskOnEnterHandler}
+            className={error ? "error" : ''}
           />
           <Button title="+" onClick={createTaskHandler} />
+          {error && <div className={"error-message"}>{error}</div>}
           {/* через useRef, но у него есть минус, нельзя получить значение после каждого введенного символа */}
           {/* <input ref={inputRef} />
           <button
@@ -84,7 +92,7 @@ export const TodolistItem = ({
               };
 
               return (
-                <li key={task.id}>
+                <li key={task.id} className={task.isDone ? "is-done" : ""}>
                   <input
                     type="checkbox"
                     checked={task.isDone}
@@ -99,9 +107,9 @@ export const TodolistItem = ({
         )}
         <div>{date}</div>
         <div>
-          <Button title="All" onClick={() => changeFilter("all")} />
-          <Button title="Active" onClick={() => changeFilter("active")} />
-          <Button title="Completed" onClick={() => changeFilter("completed")} />
+          <Button className={filter === "all" ? "active-filter" : ''} title="All" onClick={() => changeFilter("all")} />
+          <Button className={filter === "active" ? "active-filter" : ''} title="Active" onClick={() => changeFilter("active")} />
+          <Button className={filter === "completed" ? "active-filter" : ''} title="Completed" onClick={() => changeFilter("completed")} />
         </div>
       </div>
     </div>
