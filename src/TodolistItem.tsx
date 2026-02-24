@@ -7,12 +7,15 @@ type Props = {
   title: string;
   tasks: Task[];
   date?: string;
+  filter: FilterValues;
   deleteTask: (taskId: string) => void;
   changeFilter: (value: FilterValues) => void;
   createTask: (title: string) => void;
   changeTaskStatus: (taskId: Task['id'], isDone: Task['isDone']) => void;
-  filter: FilterValues;
 };
+
+
+//добавит ьна кнопку дизеблед
 
 export const TodolistItem = ({
   title,

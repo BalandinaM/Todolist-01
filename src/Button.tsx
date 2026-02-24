@@ -1,7 +1,7 @@
 type Props = {
   title: string;
   onClick: () => void;
-  className: string;
+  className?: string;
 }
  
 export const Button = ({ title, onClick, className }: Props) => {
