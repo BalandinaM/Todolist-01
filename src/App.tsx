@@ -25,12 +25,12 @@ export const App = () => {
   const todoListId_1 = v1();
   const todoListId_2 = v1();
 
-  const [todoLists, setTodoLists] = useState<TodoListType[]>([
+  const initTodoLists: TodoListType[] = [
     { idTodo: todoListId_1, titleTodo: "What to learn", filter: "all" },
     { idTodo: todoListId_2, titleTodo: "What to buy", filter: "all" },
-  ]);
+  ]
 
-  const [tasks, setTasks] = useState<TasksStateType>({
+  const initTasks: TasksStateType = {
     [todoListId_1]: [
       { id: v1(), title: "HTML&CSS", isDone: true },
       { id: v1(), title: "JS", isDone: true },
@@ -45,14 +45,16 @@ export const App = () => {
       { id: v1(), title: "Water", isDone: false },
       { id: v1(), title: "Butter", isDone: false },
     ],
-  });
+  }
+
+  const [todoLists, setTodoLists] = useState<TodoListType[]>(initTodoLists);
+  const [tasks, setTasks] = useState<TasksStateType>(initTasks);
 
   const deleteTask = (taskId: Task["id"], todoId: TodoListType["idTodo"]) => {
-    const filteredTodo = todoLists.filter(todo => todo.idTodo === todoId)
     const filteredTasks = tasks[todoId].filter((task) => {
       return task.id !== taskId;
     });
-    setTasks({...tasks[todoId],} );
+    setTasks({...tasks, [todoId]: filteredTasks} );
   };
 
   const changeFilter = (filter: FilterValues,  todoId: TodoListType["idTodo"]) => {
@@ -62,42 +64,43 @@ export const App = () => {
     setTodoLists(newTodoLists)
   };
 
-  const createTask = (title: Task["title"]) => {
+  const createTask = (title: Task["title"], todoId: TodoListType["idTodo"]) => {
     const newTask = { id: v1(), title: title, isDone: false };
-    const newTasks = [newTask, ...tasks];
-    setTasks(newTasks);
+    const newTasks = [newTask, ...tasks[todoId]];
+    setTasks({...tasks, [todoId]: newTasks});// создаю копию тасок, и по ид вставляю новый массив тасок
   };
 
-  const changeTaskStatus = (id: Task["id"], isDone: Task["isDone"]) => {
-    const task = tasks.find((t) => t.id === id);
-    if (task) {
-      task.isDone = isDone;
-      setTasks([...tasks]);
-    }
-    // лучший вариант через map, но что-то не работает...
-    // const newState: Task[] = tasks.map(t => t.id === id ? {...tasks, isDone } : t)
-    // setTasks(newState)
+  const changeTaskStatus = (id: Task["id"], isDone: Task["isDone"], todoId: TodoListType["idTodo"]) => {
+    setTasks({...tasks, [todoId]: tasks[todoId].map(task => task.id == id ? { ...task, isDone } : task)})
+  
   };
 
-  <div className="app">
+  const deleteTodoList = (todoId: TodoListType["idTodo"]) => {
+      setTodoLists(todoLists.filter((todoList)=>(todoList.idTodo !== todoId)))
+      delete tasks[todoId]
+      setTasks({...tasks})// это что бы реакт перерисовал списки.
+  }
+
+  return <div className="app">
     {todoLists.map((todolist) => {
       let filteredTasks = tasks[todolist.idTodo];
       if (todolist.filter === "active") {
         filteredTasks = tasks[todolist.idTodo].filter((task) => !task.isDone);
       }
       if (todolist.filter === "completed") {
-        filteredTasks = tasks[todolist.idTodo].filter((task) => !task.isDone);
+        filteredTasks = tasks[todolist.idTodo].filter((task) => task.isDone);
       }
 
       return (
         <TodolistItem
-          title="What to learn"
+          key={todolist.idTodo}
+          todolist={todolist}
           tasks={filteredTasks}
-          date="25.01.2026"
           deleteTask={deleteTask}
           changeFilter={changeFilter}
           createTask={createTask}
           changeTaskStatus={changeTaskStatus}
+          deleteTodoList={deleteTodoList}
         />
       );
     })}
