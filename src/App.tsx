@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { TodolistItem } from "./TodolistItem";
 import { v1 } from "uuid";
+import { CreateItemForm } from "./CreateItemForm";
 
 export type Task = {
   id: string;
@@ -81,28 +82,38 @@ export const App = () => {
       setTasks({...tasks})// это что бы реакт перерисовал списки.
   }
 
-  return <div className="app">
-    {todoLists.map((todolist) => {
-      let filteredTasks = tasks[todolist.idTodo];
-      if (todolist.filter === "active") {
-        filteredTasks = tasks[todolist.idTodo].filter((task) => !task.isDone);
-      }
-      if (todolist.filter === "completed") {
-        filteredTasks = tasks[todolist.idTodo].filter((task) => task.isDone);
-      }
+  const createTodoList = (title: TodoListType["titleTodo"]) => {
+    const todoListId = v1();
+    const newTodo: TodoListType = {idTodo: todoListId, titleTodo: title, filter: 'all'};
+    setTodoLists([newTodo, ...todoLists])
+    setTasks({...tasks, [todoListId]: []}) 
+  }
 
-      return (
-        <TodolistItem
-          key={todolist.idTodo}
-          todolist={todolist}
-          tasks={filteredTasks}
-          deleteTask={deleteTask}
-          changeFilter={changeFilter}
-          createTask={createTask}
-          changeTaskStatus={changeTaskStatus}
-          deleteTodoList={deleteTodoList}
-        />
-      );
-    })}
-  </div>;
+  return (
+    <div className="app">
+      <CreateItemForm onCreateItem={createTodoList}/>
+      {todoLists.map((todolist) => {
+        let filteredTasks = tasks[todolist.idTodo];
+        if (todolist.filter === "active") {
+          filteredTasks = tasks[todolist.idTodo].filter((task) => !task.isDone);
+        }
+        if (todolist.filter === "completed") {
+          filteredTasks = tasks[todolist.idTodo].filter((task) => task.isDone);
+        }
+
+        return (
+          <TodolistItem
+            key={todolist.idTodo}
+            todolist={todolist}
+            tasks={filteredTasks}
+            deleteTask={deleteTask}
+            changeFilter={changeFilter}
+            createTask={createTask}
+            changeTaskStatus={changeTaskStatus}
+            deleteTodoList={deleteTodoList}
+          />
+        );
+      })}
+    </div>
+  );
 };
