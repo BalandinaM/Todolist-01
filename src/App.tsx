@@ -89,6 +89,21 @@ export const App = () => {
     setTasks({...tasks, [todoListId]: []}) 
   }
 
+  const updateTodolistTitle = (todoId: TodoListType["idTodo"], title: TodoListType["titleTodo"]) => {
+    setTodoLists(todoLists.map(todoList => todoList.idTodo === todoId ? {...todoList, title} : todoList))
+  }
+
+  const updateTaskTitle = (todoId: TodoListType["idTodo"], taskId: Task["id"], title: TodoListType["titleTodo"]) => {
+    setTasks({
+      ...tasks, 
+      [todoId]: tasks[todoId].map(task =>
+        task.id === taskId 
+        ? {...task, title} 
+        : task
+      )
+    })
+  }
+
   return (
     <div className="app">
       <CreateItemForm onCreateItem={createTodoList}/>
@@ -111,6 +126,8 @@ export const App = () => {
             createTask={createTask}
             changeTaskStatus={changeTaskStatus}
             deleteTodoList={deleteTodoList}
+            updateTodolistTitle={updateTodolistTitle}
+            updateTaskTitle={updateTaskTitle}
           />
         );
       })}
