@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Button } from "./Button";
+import IconButton from "@mui/material/IconButton";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import TextField from '@mui/material/TextField';
+import { Box } from "@mui/material";
 
 export type CreateItemFormProps = {
   onCreateItem: (title: string) => void;
@@ -32,15 +35,25 @@ export const CreateItemForm = (props: CreateItemFormProps) => {
   };
 
   return (
-    <div>
-      <input
+    <Box sx={{display: "flex", justifyContent: "space-between", columnGap: 2}}>
+      <TextField
+        sx={{flexGrow: 1}}
+        label={'Enter a title'}
+        variant={'outlined'}
         value={itemTitle}
+        size={'small'}
+        error={!!error}
+        helperText={error}
         onChange={changeInputHandler}
-        onKeyDown={createItemOnEnterHandler}
-        className={error ? "error" : ""}
-      />
-      <Button title="+" onClick={createItemHandler} />
-      {error && <div className={"error-message"}>{error}</div>}
-    </div>
+        onKeyDown={createItemOnEnterHandler}/>
+      <IconButton
+        aria-label="delete"
+        size="small"
+        color="primary"
+        onClick={createItemHandler}
+      >
+        <AddCircleIcon fontSize="small" />
+      </IconButton>
+    </Box>
   );
 };

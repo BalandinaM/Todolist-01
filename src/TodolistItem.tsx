@@ -1,8 +1,22 @@
 import { FilterValues, Task, TodoListType } from "./App";
-import { Button } from "./Button";
 import { ChangeEvent } from "react";
 import { CreateItemForm } from "./CreateItemForm";
 import { EditableTitle } from "./EditableTitle";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Box, ButtonGroup, ListItemText, Paper, Typography } from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
+import Checkbox from '@mui/material/Checkbox'
+import {
+  MenuOpen,           
+  DirectionsRun,      
+  TaskAlt,         
+} from '@mui/icons-material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+
 
 type Props = {
   tasks: Task[];
@@ -26,13 +40,12 @@ export const TodolistItem = ({
   changeTaskStatus,
   deleteTodoList,
   updateTodolistTitle,
-  updateTaskTitle
+  updateTaskTitle,
 }: Props) => {
-
   const createTaskHandler = (title: string) => {
-    createTask(title, todolist.idTodo)
-  }
-  
+    createTask(title, todolist.idTodo);
+  };
+
   const changeFilterHandler = (filter: FilterValues) => {
     changeFilter(filter, todolist.idTodo);
   };
@@ -42,25 +55,38 @@ export const TodolistItem = ({
   };
 
   const updateTodolistTitleHandler = (title: string) => {
-    updateTodolistTitle(todolist.idTodo, title)
-  }
+    updateTodolistTitle(todolist.idTodo, title);
+  };
 
   return (
-    <div>
-      <div>
-        <div style={{display: "flex"}}>
-          <h3><EditableTitle value={todolist.titleTodo} onChange={updateTodolistTitleHandler}/></h3>
-          <Button title="X" onClick={deleteTodolistHandler} /> 
-        </div>
+    <Paper elevation={3}>
+      <Box sx={{ p: 3, display: "flex", flexDirection: "column",  }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <h3 style={{alignSelf: "center"}}>
+            <EditableTitle
+              value={todolist.titleTodo}
+              onChange={updateTodolistTitleHandler}
+            />
+          </h3>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            color="primary"
+            onClick={deleteTodolistHandler}
+          >
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
         <CreateItemForm onCreateItem={createTaskHandler} />
         {tasks.length === 0 ? (
           <p>Тасок нет</p>
         ) : (
-          <ul>
+          <List>
             {tasks.map((task) => {
               const deleteTaskHandler = () => {
                 deleteTask(task.id, todolist.idTodo);
               };
+
               const changeTaskStatusHandler = (
                 e: ChangeEvent<HTMLInputElement>,
               ) => {
@@ -70,42 +96,90 @@ export const TodolistItem = ({
                   todolist.idTodo,
                 );
               };
+
               const updateTaskTitleHandler = (title: string) => {
-                updateTaskTitle(todolist.idTodo, task.id, title)
-              }
+                updateTaskTitle(todolist.idTodo, task.id, title);
+              };
+
+              const label = {
+                slotProps: { input: { "aria-label": task.title } },
+              };
 
               return (
-                <li key={task.id} className={task.isDone ? "is-done" : ""}>
-                  <input
-                    type="checkbox"
-                    checked={task.isDone}
-                    onChange={changeTaskStatusHandler}
-                  />
-                  <EditableTitle value={task.title} onChange={updateTaskTitleHandler}/>
-                  <Button onClick={deleteTaskHandler} title={"X"} />
-                </li>
+                <ListItem
+                  key={task.id}
+                  sx={{
+                    pl: 0,
+                    "& .MuiListItemSecondaryAction-root": {
+                      right: 0,
+                    },
+                  }}
+                  secondaryAction={
+                    <IconButton
+                      aria-label="delete"
+                      size="small"
+                      color="secondary"
+                      onClick={deleteTaskHandler}
+                    >
+                      <ClearIcon fontSize="small" />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Checkbox
+                      checked={task.isDone}
+                      onChange={changeTaskStatusHandler}
+                      {...label}
+                      icon={<DirectionsRun color="warning" />}
+                      checkedIcon={<TaskAlt color="success" />}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText sx={{ flexGrow: 1 }}>
+                    <EditableTitle
+                      value={task.title}
+                      onChange={updateTaskTitleHandler}
+                    />
+                  </ListItemText>
+                </ListItem>
               );
             })}
-          </ul>
+          </List>
         )}
-        <div>
-          <Button
-            className={todolist.filter === "all" ? "active-filter" : ""}
-            title="All"
-            onClick={() => changeFilterHandler("all")}
-          />
-          <Button
-            className={todolist.filter === "active" ? "active-filter" : ""}
-            title="Active"
-            onClick={() => changeFilterHandler("active")}
-          />
-          <Button
-            className={todolist.filter === "completed" ? "active-filter" : ""}
-            title="Completed"
-            onClick={() => changeFilterHandler("completed")}
-          />
-        </div>
-      </div>
-    </div>
+        <Box sx={{alignSelf: "center"}}>
+          <ButtonGroup variant="contained" size="small">
+            <Tooltip title="All tasks">
+              <IconButton
+                aria-label="all tasks"
+                size="small"
+                color={todolist.filter === "all" ? "warning" : "primary"}
+                onClick={() => changeFilterHandler("all")}
+              >
+                <MenuOpen fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Active tasks">
+              <IconButton
+                aria-label="active tasks"
+                size="small"
+                color={todolist.filter === "active" ? "warning" : "primary"}
+                onClick={() => changeFilterHandler("active")}
+              >
+                <DirectionsRun fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Completed tasks">
+              <IconButton
+                aria-label="completed tasks"
+                size="small"
+                color={todolist.filter === "completed" ? "warning" : "primary"}
+                onClick={() => changeFilterHandler("completed")}
+              >
+                <TaskAlt fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </ButtonGroup>
+        </Box>
+      </Box>
+    </Paper>
   );
 };
