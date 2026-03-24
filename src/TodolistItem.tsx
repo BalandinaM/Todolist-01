@@ -22,7 +22,7 @@ type Props = {
   tasks: Task[];
   todolist: TodoListType;
   deleteTask: (taskId: Task["id"], todoId: TodoListType["idTodo"] ) => void;
-  changeFilter: (value: FilterValues, todoId: TodoListType["idTodo"]) => void;
+  changeFilter: (todoId: TodoListType["idTodo"], filter: FilterValues) => void;
   createTask: (title: Task['title'], todoId: TodoListType["idTodo"]) => void;
   changeTaskStatus: (taskId: Task['id'], isDone: Task['isDone'], todoId: TodoListType["idTodo"]) => void;
   deleteTodoList: (todoId: TodoListType["idTodo"]) => void;
@@ -47,7 +47,7 @@ export const TodolistItem = ({
   };
 
   const changeFilterHandler = (filter: FilterValues) => {
-    changeFilter(filter, todolist.idTodo);
+    changeFilter(todolist.idTodo, filter);
   };
 
   const deleteTodolistHandler = () => {
