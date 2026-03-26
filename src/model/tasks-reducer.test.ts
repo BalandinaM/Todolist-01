@@ -1,5 +1,5 @@
 import { beforeEach, expect, test } from 'vitest'
-import type { TasksStateType } from '../App'
+import type { TasksStateType } from '../app/App'
 import { changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC, tasksReducer } from './tasks-reducer'
 import { createTodolistAC, deleteTodolistAC } from './todolists-reducer'
 import { v1 } from 'uuid'

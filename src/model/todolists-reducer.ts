@@ -1,4 +1,4 @@
-import { TodoListType } from "../App";
+import { TodoListType } from "../app/App";
 import { v1 } from "uuid";
 
 const initialState: TodoListType[] = [];
