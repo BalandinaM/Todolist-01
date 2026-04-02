@@ -10,13 +10,15 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { Container, CssBaseline, Grid } from "@mui/material";
 import { SwitchCustom } from "../SwitchCustom";
 import { ThemeProvider } from "@mui/material/styles";
-import {getTheme} from "../theme/theme";
+import {getTheme} from "../common/theme/theme";
 import { changeTodolistFilterAC, changeTodolistTitleAC, createTodolistAC, deleteTodolistAC } from "../model/todolists-reducer";
 import { changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC } from "../model/tasks-reducer";
 import { useAppSelector } from "../common/hooks/useAppSelector";
 import { selectTodolists } from "../model/todolists-selectors";
 import { selectTasks } from "../model/tasks-selectors";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
+import { selectThemeMode } from "./app-selectors";
+import { changeThemeModeAC } from "./app-reducer";
 
 export type Task = {
   id: string;
@@ -34,13 +36,11 @@ export type TodoListType = {
 
 export type TasksStateType = Record<string, Task[]>
 
-type ThemeMode = 'dark' | 'light'
-
 export const App = () => {
   const todoLists = useAppSelector(selectTodolists)
   const tasks = useAppSelector(selectTasks)
   const dispatch = useAppDispatch()
-  const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+  const themeMode = useAppSelector(selectThemeMode)
 
   const deleteTask = (taskId: Task["id"], todolistId: TodoListType["idTodo"]) => {
     dispatch(deleteTaskAC({todolistId, taskId}))
@@ -76,7 +76,7 @@ export const App = () => {
   }
 
   const changeMode = () => {
-    setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+    dispatch(changeThemeModeAC({themeMode: themeMode === 'light' ? 'dark' : 'light'}))
   }
 
   const theme = useMemo(() => getTheme(themeMode), [themeMode]);
