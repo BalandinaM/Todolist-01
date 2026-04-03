@@ -1,11 +1,8 @@
+import { useAppDispatch } from "@/common/hooks/useAppDispatch";
+import { TodoListType, FilterValues, changeTodolistFilterAC } from "@/features/todolists/model/todolists-reducer";
 import { MenuOpen, DirectionsRun, TaskAlt } from "@mui/icons-material";
 import { Box, ButtonGroup, Tooltip, IconButton } from "@mui/material";
-import { useAppDispatch } from "./common/hooks/useAppDispatch";
-import {
-  FilterValues,
-  TodoListType,
-  changeTodolistFilterAC,
-} from "./model/todolists-reducer";
+
 
 type Props = {
   todolist: TodoListType;

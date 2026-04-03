@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
-import {tasksReducer} from '../model/tasks-reducer'
-import {todolistsReducer} from '../model/todolists-reducer'
 import { appReducer } from './app-reducer';
+import { tasksReducer } from '@/features/todolists/model/tasks-reducer';
+import { todolistsReducer } from '@/features/todolists/model/todolists-reducer';
  
 // создание store
 export const store = configureStore({

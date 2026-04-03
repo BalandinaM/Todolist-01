@@ -1,14 +1,12 @@
+import { useAppSelector } from "@/common/hooks/useAppSelector";
+import { selectTasks } from "@/features/todolists/model/tasks-selectors";
+import { TodoListType } from "@/features/todolists/model/todolists-reducer";
 import {
   List,
 } from "@mui/material";
-import {
-  Task,
-} from "./model/tasks-reducer";
-import { TodoListType } from "./model/todolists-reducer";
-import { useAppDispatch } from "./common/hooks/useAppDispatch";
-import { useAppSelector } from "./common/hooks/useAppSelector";
-import { selectTasks } from "./model/tasks-selectors";
-import { TaskItem } from "./TaskItem";
+import { TaskItem } from "./TaskItem/TaskItem";
+import { Task } from "@/features/todolists/model/tasks-reducer";
+
 
 type Props = {
   todolist: TodoListType;

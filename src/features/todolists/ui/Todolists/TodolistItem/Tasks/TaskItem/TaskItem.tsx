@@ -8,14 +8,10 @@ import {
 } from "@mui/material";
 import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
-import { EditableTitle } from "./EditableTitle";
-import {
-  deleteTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  Task,
-} from "./model/tasks-reducer";
 import ClearIcon from "@mui/icons-material/Clear";
+import { EditableTitle } from "@/common/components/EditableTitle/EditableTitle";
+import { deleteTaskAC, changeTaskStatusAC, changeTaskTitleAC, Task } from "@/features/todolists/model/tasks-reducer";
+
 
 type Props = {
   task: Task,

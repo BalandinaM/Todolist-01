@@ -1,7 +1,8 @@
+import { useAppSelector } from "@/common/hooks/useAppSelector";
 import { Grid } from "@mui/material";
-import { useAppSelector } from "./common/hooks/useAppSelector";
-import { selectTodolists } from "./model/todolists-selectors";
-import { TodolistItem } from "./TodolistItem";
+import { selectTodolists } from "../../model/todolists-selectors";
+import { TodolistItem } from "./TodolistItem/TodolistItem";
+
 
 export const Todolists = () => {
   const todoLists = useAppSelector(selectTodolists);

@@ -1,13 +1,9 @@
 import { Box } from "@mui/material";
-import { EditableTitle } from "./EditableTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  changeTodolistTitleAC,
-  deleteTodolistAC,
-  TodoListType,
-} from "./model/todolists-reducer";
-import { useAppDispatch } from "./common/hooks/useAppDispatch";
 import IconButton from "@mui/material/IconButton";
+import { EditableTitle } from "@/common/components/EditableTitle/EditableTitle";
+import { useAppDispatch } from "@/common/hooks/useAppDispatch";
+import { TodoListType, deleteTodolistAC, changeTodolistTitleAC } from "@/features/todolists/model/todolists-reducer";
 
 type Props = {
   todolist: TodoListType;

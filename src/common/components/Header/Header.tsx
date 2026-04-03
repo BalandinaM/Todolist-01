@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import { SwitchCustom } from "@/SwitchCustom";
+import { SwitchCustom } from "@/common/components/Header/SwitchCustom/SwitchCustom";
 import { AppBar, Toolbar, Container, IconButton } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu'
 import { changeThemeModeAC } from '@/app/app-reducer';
