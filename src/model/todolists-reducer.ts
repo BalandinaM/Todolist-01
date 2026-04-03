@@ -1,5 +1,12 @@
 import { createAction, createReducer, nanoid } from "@reduxjs/toolkit";
-import { TodoListType } from "../app/App";
+
+export type FilterValues = 'all' | 'active' | 'completed'
+
+export type TodoListType = {
+  idTodo: string
+  titleTodo: string
+  filter: FilterValues
+} 
 
 const initialState: TodoListType[] = [];
 
